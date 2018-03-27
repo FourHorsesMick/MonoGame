@@ -88,8 +88,7 @@
   </PropertyGroup>
 
   <Target Name="RunContentBuilder">
-    <Exec Condition=" '%(ContentReferences.FullPath)' != '' " Command="$(MonoGameContentBuilderCmd) /@:&quot;%(ContentReferences.FullPath)&quot; $(Header)"
-          WorkingDirectory="%(ContentReferences.RootDir)%(ContentReferences.Directory)" />
+    <Exec Condition=" '%(ContentReferences.FullPath)' != '' " Command="$(MonoGameContentBuilderCmd) /workingDir:&quot;%(ContentReferences.RootDir)%(ContentReferences.Directory)..\Content&quot; /@:&quot;%(ContentReferences.FullPath)&quot; $(Header)" />
 
     <CreateItem Include="$(ParentOutputDir)\**\*.*">
           <Output TaskParameter="Include" ItemName="ExtraContent" />
