@@ -9,6 +9,7 @@
 #include "MonoGame.Framework/Microsoft/Xna/Framework/Input/Buttons.h"
 #include "MonoGame.Framework/Microsoft/Xna/Framework/Input/NpadConnectionType.h"
 
+#include <nn/hid/hid_ControllerSupport.h>
 #include <nn/hid/hid_Npad.h>
 #include <nn/hid/hid_NpadJoy.h>
 #include <nn/hid/hid_Vibration.h>
@@ -144,6 +145,18 @@ static void NpadGetStateDualMode(nn::hid::NpadButtonSet& buttons, nn::hid::Analo
 
 bool GamePad$_$S_NpadGetState(int index, unsigned long long* timestamp, unsigned int* btns, float* lx, float* ly, float* rx, float* ry, float* lt, float* rt)
 {
+	// Terrible place to insert this, but...
+	if (index == 0)
+	{
+		if (!GamePad$_$S_NpadIsConnected(0) && !GamePad$_$S_NpadIsConnected(1))
+		{
+			nn::hid::ControllerSupportArg supportArgs;
+			supportArgs.SetDefault();
+			supportArgs.enablePermitJoyDual = true;
+			supportArgs.enableSingleMode = true;
+			nn::hid::ShowControllerSupport(supportArgs);
+		}
+	}
 	auto id = g_NpadIds[index];
 RETRY:
 	auto style = nn::hid::GetNpadStyleSet(id);
